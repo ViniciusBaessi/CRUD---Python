@@ -32,7 +32,7 @@ id = 1
 #Armazena os dados de todas as reservas
 
 
-pasta = r'C:\Users\vfari\Documents\GitHub\Estudo-Python\CRUD\assets\Foto.png'
+pasta = r'C:\Users\vfari\Documents\GitHub\CRUD-Python\CRUD\assets\Foto.png'
 
     
 
