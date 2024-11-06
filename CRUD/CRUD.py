@@ -15,11 +15,9 @@ for i in range(len(dados)):
         nova_reserva.append(dados[i][contador])
     reservas.append(nova_reserva)
 
-print(reservas)
-
-
 
 sg.theme('SystemDefault')
+
 
 # Captura a data atual
 data_atual = datetime.now().date()
@@ -59,13 +57,16 @@ def validar_registro(pessoas,nome, data):
 # TELA DE LEITURA DOS DADOS ------------------------------------------------------
 def exibir_dados():
 
-    global reservas, nova_reserva
+    #Alimentando aplicação com dados do SQL
+    from Banco_de_dados import alimentando_aplicação
+    dados = alimentando_aplicação()
 
+    # Layout da minha tela
     layout_popup = [
-            [sg.Push(), sg.Text("Reservas ativas"), sg.Push()],
+            [sg.Push(), sg.Text(f"Reservas ativas - {len(dados)}"), sg.Push()],
             [sg.Text("")],
 
-            [sg.Table(values = reservas, key = "Tabela",
+            [sg.Table(values = dados, key = "Tabela",
                       headings=["ID", "Pessoas", "Nome do cliente", "Data"], size=(100,1), 
                       col_widths=[5, 8, 30, 10], auto_size_columns=False, num_rows=10, expand_x=True, justification='center')],
 
@@ -76,16 +77,16 @@ def exibir_dados():
 
     janela_popup = sg.Window("Leitura dos dados", layout_popup, modal=True)
 
-    # Lê eventos da janela popup até que o usuário feche
+    # Execução em loop para a tela funcionar de forma constante
     while True:
 
+        # Captura de eventos e valores na tela
         event, values = janela_popup.read()
-
-        
 
         if event in (sg.WIN_CLOSED, "Fechar"):
             break
 
+        
         if event == "Update":
             campo_da_tabela = values["Tabela"]
             if campo_da_tabela == []:
@@ -95,7 +96,7 @@ def exibir_dados():
                 janela_popup.close()
                 atualizar_dados(campo_da_tabela)
 
-
+        # Capturando o clique na linha da tabela
         if event == "Delete":
             campo_da_tabela = values["Tabela"]
             if campo_da_tabela == []:
