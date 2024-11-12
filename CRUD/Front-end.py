@@ -47,13 +47,13 @@ def principal(page: ft.Page):
     )
 
     foto1 = ft.Image(
-        src=r"C:\Users\vfari\Documents\GitHub\Estudo-Python\Python\Pessoal\Flet\Foto.png",
+        src=r"C:\Users\vfari\Documents\GitHub\CRUD-Python\CRUD\assets\Foto.png",
         width=80,  
         height=100 
     )
 
     foto2 = ft.Image(
-            src=r"C:\Users\vfari\Documents\GitHub\Estudo-Python\Python\Pessoal\Flet\Restaurant.png",
+            src=r"C:\Users\vfari\Documents\GitHub\CRUD-Python\CRUD\assets\Restaurant.png",
             width=150,  
             height=100  
         )
