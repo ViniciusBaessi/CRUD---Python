@@ -9,4 +9,4 @@
 
 Segue abaixo a pré-visualização:
 
-<img src="https://github.com/ViniciusBaessi/Calculadora-web/blob/main/assets/Calculadora.png" alt="" style="width:450px;">
+<img src="https://github.com/ViniciusBaessi/Estudo-Python/blob/main/Python/Pessoal/Flet/%7BCB327F75-C3F9-4480-8CFE-98CF975AD8D1%7D.png" alt="" style="width:250px;">
