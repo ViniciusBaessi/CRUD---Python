@@ -1,6 +1,6 @@
 # CRUD (Python + Flet + mySQL) 📲
 
-⚡ Criação de um programa com funcionalidades de adicionar, atualizar, excluir e exibir os dados.
+⚡ Criação de um programa com funções de CREATE, READ, UPDATE e DELETE.
 
 
 📄 Feito apenas com Python (programação), flet (GUI) e MySQL (banco de dados).
