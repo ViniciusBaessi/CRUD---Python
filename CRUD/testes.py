@@ -1,19 +1,33 @@
 import flet as ft
 
-def principal(page: ft.Page):
-    # Container com fundo transparente e apenas borda visível
-    container_transparente = ft.Container(
-        width=200,
-        height=100,
-        bgcolor=None,               # Fundo transparente
-        border=ft.border.all(2, ft.colors.BLUE),  # Borda azul com 2px de largura
-        border_radius=8,            # Bordas arredondadas (opcional)
-        alignment=ft.alignment.center,  # Centraliza o conteúdo dentro do container
-        
-        
-    )
+def main(page: ft.Page):
+    # Configurações da página
+    page.title = "Exemplo de Popup"
+    page.window.height = 300
+    page.window.width = 400
 
-    # Adiciona o container à página
-    page.add(container_transparente)
+    # Função para mostrar o popup
+    def show_popup(e):
+        # Criando um AlertDialog (popup)
+        alert_dialog = ft.AlertDialog(
+            title=ft.Text("Alerta"),
+            content=ft.Text("Este é um popup de alerta."),
+            actions=[ft.TextButton("Fechar", on_click=lambda e: close_popup(alert_dialog))]
+        )
+        # Exibindo o popup através de overlay
+        page.overlay.append(alert_dialog)
+        alert_dialog.open = True
+        page.update()
 
-ft.app(target=principal)
+    # Função para fechar o popup
+    def close_popup(dialog):
+        dialog.open = False
+        page.update()
+
+    # Botão para abrir o popup
+    open_popup_button = ft.ElevatedButton("Mostrar Popup", on_click=show_popup)
+
+    # Adicionando o botão à página
+    page.add(open_popup_button)
+
+ft.app(target=main)

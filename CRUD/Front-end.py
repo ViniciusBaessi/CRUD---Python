@@ -109,18 +109,13 @@ def principal(page: ft.Page):
     
 
 
-
-
-
-
-
-
     # Botão ----------------------------------------------------------------
     def hover(e):
         e.control.width = 199 if e.data == "true" else 200
         e.control.height = 49 if e.data == "true" else 50
         e.control.opacity = 0.9 if e.data == "true" else 1  
-        e.control.update()  # Chama update sem argumentos
+        e.control.update()  
+
     salvar = ft.Row(
         [
             ft.Container(
