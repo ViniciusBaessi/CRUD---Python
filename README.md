@@ -1,4 +1,4 @@
-# CRUD (Python + Flet + mySQL) 📲
+# CRUD (Python + Flet + MySQL) 📲
 
 ⚡ Criação de um programa com funções de CREATE, READ, UPDATE e DELETE.
 
