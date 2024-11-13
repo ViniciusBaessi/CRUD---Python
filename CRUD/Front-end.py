@@ -110,11 +110,16 @@ def principal(page: ft.Page):
 
 
     # Botão ----------------------------------------------------------------
-    def hover(e):
+    def hover_botão(e):
         e.control.width = 199 if e.data == "true" else 200
         e.control.height = 49 if e.data == "true" else 50
         e.control.opacity = 0.9 if e.data == "true" else 1  
         e.control.update()  
+        
+
+    def hover(e):
+        e.control.opacity = 0.7 if e.data == "true" else 1  
+        e.control.update()
 
     salvar = ft.Row(
         [
@@ -126,7 +131,7 @@ def principal(page: ft.Page):
                 border_radius=8,
                 alignment=ft.alignment.center,  
                 on_click=capturar_dados,  # Agora chamando a função capturar_dados
-                on_hover=hover,  
+                on_hover=hover_botão,  
             )
         ],
         alignment="center"  # Centraliza o Row na página
@@ -163,6 +168,7 @@ def principal(page: ft.Page):
                         content=Interatíveis(icon=ft.icons.EDIT),
                         alignment=ft.alignment.center,
                         border_radius=6,
+                        on_hover=hover,
                     ),
                     # Segundo Container interno
                     ft.Container(
@@ -182,7 +188,10 @@ def principal(page: ft.Page):
                         content=Interatíveis(icon=ft.icons.VISIBILITY),
                         alignment=ft.alignment.center,
                         border_radius=6,
+                        on_hover=hover,
                     ),
+
+                    #Espaçamento entre o botão e o texto
                     ft.Container(width=5),  
 
                     ft.Text(
@@ -204,8 +213,24 @@ def principal(page: ft.Page):
         )
     )
     
+    # Mensagem ----------------------------------------------------------------
+    mensagem = ft.Container(
+        content=ft.Text(
+            "Não existem reservas cadastradas!",
+            color=ft.colors.BLACK,
+            size=14,
+        ),
+        alignment=ft.Alignment(0, 0) ,
+        padding=ft.Padding(top=30, left=0, right=0, bottom=0),
+      
+    )
+    
+         
+
+
+
     page.add(
-        cabeçalho, linha, espaço, stack, Menu1, salvar, espaço, dados
+        cabeçalho, linha, espaço, stack, Menu1, salvar, espaço, dados, dados, mensagem
     )
 
 ft.app(target=principal)
