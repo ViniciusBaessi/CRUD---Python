@@ -3,7 +3,7 @@
 ⚡ Criação de um programa com funções de CREATE, READ, UPDATE e DELETE.
 
 
-📄 Feito apenas com Python (programação), flet (GUI) e MySQL (banco de dados).
+📄 Feito com Python (programação), flet (GUI) e MySQL (banco de dados).
 
 <br>
 
