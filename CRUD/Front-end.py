@@ -117,7 +117,7 @@ def principal(page: ft.Page):
     def abrir_popup(a):
         # Criando um AlertDialog (popup)
         alert_dialog = ft.AlertDialog(
-            title=ft.Text("Campo incorreto"),
+            title=ft.Text("Campo incorreto", size=20),
             content=ft.Text(a),
             actions=[ft.TextButton("Fechar", on_click=lambda e: fechar_popup(alert_dialog))]
         )
