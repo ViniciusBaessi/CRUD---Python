@@ -12,7 +12,6 @@ def principal(page: ft.Page):
     page.window.maximizable = False
     page.window.always_on_top = True
   
-
     # Cabeçalho ----------------------------------------------------------------
     cabeçalho = ft.Row(
         alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
@@ -114,7 +113,6 @@ def principal(page: ft.Page):
         )
     )
 
-
     # popups ----------------------------------------------------------------
     def abrir_popup(a):
         # Criando um AlertDialog (popup)
@@ -168,11 +166,6 @@ def principal(page: ft.Page):
         e.control.height = 39 if e.data == "true" else 40
         e.control.opacity = 0.9 if e.data == "true" else 1  
         e.control.update()  
-        
-
-    def hover(e):
-        e.control.opacity = 0.7 if e.data == "true" else 1  
-        e.control.update()
 
     salvar = ft.Row(
         [
@@ -199,6 +192,10 @@ def principal(page: ft.Page):
             self.icon_color = ft.colors.BLACK  
             self.icon_size = 18
             
+    def hover(e):
+        e.control.opacity = 0.7 if e.data == "true" else 1  
+        e.control.update()
+    
     dados = ft.Container(
         visible=True,
         height=50,
@@ -278,10 +275,6 @@ def principal(page: ft.Page):
       
     )
     
-         
-
-
-
     page.add(
         cabeçalho, linha, espaço, stack, Menu1, salvar, espaço, dados, dados, mensagem
     )

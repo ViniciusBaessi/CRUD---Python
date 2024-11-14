@@ -28,6 +28,7 @@ def main(page: ft.Page):
         label="Selecione o horário",
         options=[ft.dropdown.Option(h) for h in horarios],
         width=200,
+        bgcolor=ft.colors.WHITE
     )
 
     # Botão para abrir o popup
