@@ -2,32 +2,38 @@ import flet as ft
 
 def main(page: ft.Page):
     # Configurações da página
-    page.title = "Exemplo de Popup"
+    page.title = "Exemplo de Popup com Seleção de Horário"
     page.window.height = 300
     page.window.width = 400
 
-    # Função para mostrar o popup
-    def show_popup(e):
-        # Criando um AlertDialog (popup)
-        alert_dialog = ft.AlertDialog(
-            title=ft.Text("Alerta"),
-            content=ft.Text("Este é um popup de alerta."),
-            actions=[ft.TextButton("Fechar", on_click=lambda e: close_popup(alert_dialog))]
-        )
-        # Exibindo o popup através de overlay
-        page.overlay.append(alert_dialog)
-        alert_dialog.open = True
+    # Criando o AlertDialog (popup)
+    alert_dialog = ft.AlertDialog(
+        title=ft.Text("Alerta"),
+        content=ft.Text("Este é um popup de alerta."),
+        actions=[ft.TextButton("Fechar", on_click=lambda e: toggle_popup())]
+    )
+    page.overlay.append(alert_dialog)
+
+    # Função para abrir/fechar o popup
+    def toggle_popup(e=None):
+        alert_dialog.open = not alert_dialog.open
         page.update()
 
-    # Função para fechar o popup
-    def close_popup(dialog):
-        dialog.open = False
-        page.update()
+    # Campo de seleção de horário com intervalo das 10:00 às 11:00
+    horarios = [
+        "10:00", "10:05", "10:10", "10:15", "10:20", "10:25", "10:30", 
+        "10:35", "10:40", "10:45", "10:50", "10:55", "11:00"
+    ]
+    horario_dropdown = ft.Dropdown(
+        label="Selecione o horário",
+        options=[ft.dropdown.Option(h) for h in horarios],
+        width=200,
+    )
 
     # Botão para abrir o popup
-    open_popup_button = ft.ElevatedButton("Mostrar Popup", on_click=show_popup)
+    open_popup_button = ft.ElevatedButton("Mostrar Popup", on_click=toggle_popup)
 
-    # Adicionando o botão à página
-    page.add(open_popup_button)
+    # Adicionando os elementos à página
+    page.add(horario_dropdown, open_popup_button)
 
 ft.app(target=main)
