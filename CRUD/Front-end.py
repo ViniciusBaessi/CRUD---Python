@@ -8,9 +8,10 @@ def principal(page: ft.Page):
     page.window.width = 350
     page.window.height = 750
     page.bgcolor = "#e8e8e8" 
-    page.window.resizable = True
+    page.window.resizable = False
     page.window.maximizable = False
     page.window.always_on_top = True
+    page.scroll = "adaptive"
   
     # Cabeçalho ----------------------------------------------------------------
     cabeçalho = ft.Row(
@@ -86,15 +87,14 @@ def principal(page: ft.Page):
 
     nome = Input_dados(label="Nome", hint_text="Responsável pela reserva")
     quantidade = Input_dados(label="Quantidade de pessoas", hint_text="De 1 a 10")
-    data = Input_dados(label="Data", hint_text="DD/MM/AAAA")
+    data = Input_dados(label="Data", hint_text="DD/MM/AAAA - Limite até 7 dias!")
     
     
     horarios = [
     "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00",
     "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30",
     "19:00", "19:30", "20:00", "20:30", "21:00", "21:30", "22:00", "22:30", "23:00"
-]
-    
+    ]
     horario = ft.Dropdown(
         label="10h-AM até 11-PM",
         options=[ft.dropdown.Option(h) for h in horarios],
@@ -103,7 +103,8 @@ def principal(page: ft.Page):
         border_color = "#999999",
         label_style = ft.TextStyle(color="#8a8a8a"),
         text_style = ft.TextStyle(color=ft.colors.BLACK),
-        bgcolor="#e8e8e8"
+        bgcolor="#e8e8e8",
+        value=""
         )
         
 
@@ -132,33 +133,59 @@ def principal(page: ft.Page):
 
 
     def validar_registro(e):
-
+        
         # Captura a data atual
         data_atual = datetime.now().date()
         
         # Define o limite de 7 dias após a data atual
         limite_data = data_atual + timedelta(days=7)
 
+
+        if nome.value == "" or quantidade.value == "" or data.value == "" or horario.value == "":
+            abrir_popup("Existem campos vazios!")
+            return
+
+
         #Validação do nome
-        if nome.value.isdigit() == True or nome.value == "" or len(nome.value) < 3:
+        elif nome.value.isdigit() == True or len(nome.value) in range(1,3):
             abrir_popup("Por favor, verifique o campo do nome!")
+            return
         
         #Validação da quantidade
         elif quantidade.value.isdigit() == True:
-            valor = int(quantidade.value)
-            if valor == 0 :
+            valor1 = int(quantidade.value)
+            if valor1 == 0 :
                 abrir_popup("Não pode reservar para zero pessoas!")
-            elif valor < 1 or valor > 10:
+                return
+            elif valor1 < 1 or valor1 > 10:
                 abrir_popup("Verifique o limite de reservas!")
+                return
+        elif quantidade.value.isdigit() == False and quantidade.value != "":
+            abrir_popup("A quantidade deve ser numérica!")
+            return
 
-        #Validação da data
-        if not data.value == "":
-            valor = datetime.strptime(data.value, '%d/%m/%Y').date()
+        
+        elif data.value != "":
+            try:
+                valor2 = datetime.strptime(data.value, '%d/%m/%Y').date()
+                
+                if valor2 > limite_data or valor2 < data_atual:
+                    abrir_popup("Selecione uma data válida para a reserva")
+                    return
+                else:
+                    valor2 = valor2.strftime('%d/%m/%Y')
+                    #AQUIIIIIIIIIIII
 
-            if valor > limite_data or valor < data_atual:
-                abrir_popup("Selecione uma data válida para a reserva")
-            else:
-                valor = valor.strftime('%d/%m/%Y')
+            except ValueError:
+                abrir_popup("Escreva no formato (dia/mês/ano)!")
+                return
+
+        
+        lista = [nome.value,quantidade.value, horario.value]
+        abrir_popup("Registro realizado com sucesso!")
+        print(lista)
+
+
 
     # Botão e estilização ----------------------------------------------------------------
     def hover_botão(e):
@@ -276,7 +303,7 @@ def principal(page: ft.Page):
     )
     
     page.add(
-        cabeçalho, linha, espaço, stack, Menu1, salvar, espaço, dados, dados, mensagem
+        cabeçalho, linha, espaço, stack, Menu1, salvar, espaço, dados, mensagem
     )
 
 ft.app(target=principal)
