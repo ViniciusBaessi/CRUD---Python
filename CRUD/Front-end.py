@@ -1,5 +1,6 @@
 import flet as ft
 from datetime import datetime, timedelta #Pegar as datas
+import sqlite3
 
 def principal(page: ft.Page):
 
@@ -165,25 +166,29 @@ def principal(page: ft.Page):
             return
 
         
-        elif data.value != "":
-            try:
-                valor2 = datetime.strptime(data.value, '%d/%m/%Y').date()
-                
-                if valor2 > limite_data or valor2 < data_atual:
-                    abrir_popup("Selecione uma data válida para a reserva")
-                    return
-                else:
-                    valor2 = valor2.strftime('%d/%m/%Y')
-                    #AQUIIIIIIIIIIII
-
-            except ValueError:
-                abrir_popup("Escreva no formato (dia/mês/ano)!")
+        
+        try:
+            valor2 = datetime.strptime(data.value, '%d/%m/%Y').date()
+            
+            if valor2 > limite_data or valor2 < data_atual:
+                abrir_popup("Selecione uma data válida para a reserva")
                 return
+            else:
+                data_formatada = valor2.strftime('%d/%m/%Y')
+
+        except ValueError:
+            abrir_popup("Escreva no formato (dia/mês/ano)!")
+            return
 
         
-        lista = [nome.value,quantidade.value, horario.value]
+        lista = [nome.value,quantidade.value,data_formatada, horario.value]
         abrir_popup("Registro realizado com sucesso!")
-        print(lista)
+        
+        #Alimentando aplicação com dados do SQL
+        from Banco_de_dados import inserção_de_dados
+        inserção_de_dados(lista[0], lista[1], lista[1], lista[3])
+        
+        
 
 
 
@@ -222,6 +227,7 @@ def principal(page: ft.Page):
     def hover(e):
         e.control.opacity = 0.7 if e.data == "true" else 1  
         e.control.update()
+    
     
     dados = ft.Container(
         visible=True,
