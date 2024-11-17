@@ -181,10 +181,11 @@ def principal(page: ft.Page):
             return
 
         
+
+
+        # Armazenando os dados em uma lista de forma organizada e jogando para o banco SQL
         lista = [nome.value,quantidade.value,data_formatada, horario.value]
         abrir_popup("Registro realizado com sucesso!")
-        
-        #Alimentando aplicação com dados do SQL
         from Banco_de_dados import inserção_de_dados
         inserção_de_dados(lista[0], lista[1], lista[1], lista[3])
         
@@ -309,7 +310,7 @@ def principal(page: ft.Page):
     )
     
     page.add(
-        cabeçalho, linha, espaço, stack, Menu1, salvar, espaço, dados, mensagem
+        cabeçalho, linha, espaço, stack, Menu1, salvar, espaço,  mensagem
     )
 
 ft.app(target=principal)
