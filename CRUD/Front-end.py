@@ -2,6 +2,18 @@ import flet as ft
 from datetime import datetime, timedelta #Pegar as datas
 import sqlite3
 
+from Banco_de_dados import alimentando_aplicação
+dados = alimentando_aplicação()
+
+lista = []
+for i in range(len(dados)):
+    nova_reserva = []
+    for contador in range(4):
+        nova_reserva.append(dados[i][contador])
+    lista.append(nova_reserva)
+
+print(lista)
+
 def principal(page: ft.Page):
 
     # Atributos da minha tela
@@ -174,7 +186,7 @@ def principal(page: ft.Page):
                 abrir_popup("Selecione uma data válida para a reserva")
                 return
             else:
-                data_formatada = valor2.strftime('%d/%m/%Y')
+                data_formatada = valor2.strftime('%Y-%m-%d')
 
         except ValueError:
             abrir_popup("Escreva no formato (dia/mês/ano)!")
@@ -187,7 +199,8 @@ def principal(page: ft.Page):
         lista = [nome.value,quantidade.value,data_formatada, horario.value]
         abrir_popup("Registro realizado com sucesso!")
         from Banco_de_dados import inserção_de_dados
-        inserção_de_dados(lista[0], lista[1], lista[1], lista[3])
+        inserção_de_dados(lista[0], lista[1], lista[2], lista[3])
+        page.update()
         
         
 
@@ -229,72 +242,77 @@ def principal(page: ft.Page):
         e.control.opacity = 0.7 if e.data == "true" else 1  
         e.control.update()
     
+
+
     
-    dados = ft.Container(
-        visible=True,
-        height=50,
-        bgcolor=None,              
-        border=ft.border.all(2, ft.colors.GREY),  
-        border_radius=8,           
-        padding=ft.padding.only(left=5, right=20, top=0, bottom=0),
-        content=ft.Container(
-            border_radius=8, 
-            bgcolor="#e8e8e8", 
-            content=ft.Row(
-                spacing=3,
-                alignment=ft.MainAxisAlignment.START, 
-                controls=[
-                    # Primeiro Container interno
-                    ft.Container(
-                        width=35,
-                        height=35,
-                        bgcolor="green",
-                        content=Interatíveis(icon=ft.icons.EDIT),
-                        alignment=ft.alignment.center,
-                        border_radius=6,
-                        on_hover=hover,
-                    ),
-                    # Segundo Container interno
-                    ft.Container(
-                        width=35,
-                        height=35,
-                        bgcolor="red",
-                        content=Interatíveis(icon=ft.icons.DELETE),
-                        alignment=ft.alignment.center,
-                        border_radius=6,
-                        on_hover=hover,
-                    ),
-                    # Terceiro Container interno
-                    ft.Container(
-                        width=35,
-                        height=35,
-                        bgcolor="blue",
-                        content=Interatíveis(icon=ft.icons.VISIBILITY),
-                        alignment=ft.alignment.center,
-                        border_radius=6,
-                        on_hover=hover,
-                    ),
+    def dados():
+        return ft.Container(
+            visible=True,
+            height=50,
+            bgcolor=None,              
+            border=ft.border.all(2, ft.colors.GREY),  
+            border_radius=8,           
+            padding=ft.padding.only(left=5, right=20, top=0, bottom=0),
+            content=ft.Container(
+                border_radius=8, 
+                bgcolor="#e8e8e8", 
+                content=ft.Row(
+                    spacing=3,
+                    alignment=ft.MainAxisAlignment.START, 
+                    controls=[
+                        # Primeiro Container interno
+                        ft.Container(
+                            width=35,
+                            height=35,
+                            bgcolor="green",
+                            content=Interatíveis(icon=ft.icons.EDIT),
+                            alignment=ft.alignment.center,
+                            border_radius=6,
+                            on_hover=hover,
+                        ),
+                        # Segundo Container interno
+                        ft.Container(
+                            width=35,
+                            height=35,
+                            bgcolor="red",
+                            content=Interatíveis(icon=ft.icons.DELETE),
+                            alignment=ft.alignment.center,
+                            border_radius=6,
+                            on_hover=hover,
+                        ),
+                        # Terceiro Container interno
+                        ft.Container(
+                            width=35,
+                            height=35,
+                            bgcolor="blue",
+                            content=Interatíveis(icon=ft.icons.VISIBILITY),
+                            alignment=ft.alignment.center,
+                            border_radius=6,
+                            on_hover=hover,
+                        ),
 
-                    #Espaçamento entre o botão e o texto
-                    ft.Container(width=5),  
+                        #Espaçamento entre o botão e o texto
+                        ft.Container(width=5),  
 
-                    ft.Text(
-                        "ID: 01",
-                        color=ft.colors.BLACK,
-                        size=13,
-                        weight="bold"
-                    ),
-                    ft.Container(width=5),  
+                        ft.Text(
+                            "ID: 01",
+                            color=ft.colors.BLACK,
+                            size=13,
+                            weight="bold"
+                        ),
+                        ft.Container(width=5),  
 
-                    ft.Text(
-                        "Nome: Paulo",
-                        color=ft.colors.BLACK,
-                        size=13,
-                        weight="bold"
-                    ),
-                ]
+                        ft.Text(
+                            "Nome: Paulo",
+                            color=ft.colors.BLACK,
+                            size=13,
+                            weight="bold"
+                        ),
+                    ]
+                )
             )
-        )
+
+          
     )
     
     # Mensagem ----------------------------------------------------------------
@@ -309,8 +327,17 @@ def principal(page: ft.Page):
       
     )
     
+
+
+
+    if not lista:
+        tela= mensagem
+    else:
+        tela = dados()
+
+
     page.add(
-        cabeçalho, linha, espaço, stack, Menu1, salvar, espaço,  mensagem
+        cabeçalho, linha, espaço, stack, Menu1, salvar, espaço, tela
     )
 
 ft.app(target=principal)
