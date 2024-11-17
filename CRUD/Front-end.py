@@ -5,6 +5,8 @@ import sqlite3
 from Banco_de_dados import alimentando_aplicação
 dados = alimentando_aplicação()
 
+
+# Trazendo dados do SQL -----------------------------------------------------------
 lista = []
 for i in range(len(dados)):
     nova_reserva = []
@@ -12,11 +14,10 @@ for i in range(len(dados)):
         nova_reserva.append(dados[i][contador])
     lista.append(nova_reserva)
 
-print(lista)
 
 def principal(page: ft.Page):
 
-    # Atributos da minha tela
+    # Atributos da minha tela -----------------------------------------------------------
     page.title = "Tela principal"
     page.window.width = 350
     page.window.height = 750
@@ -102,7 +103,6 @@ def principal(page: ft.Page):
     quantidade = Input_dados(label="Quantidade de pessoas", hint_text="De 1 a 10")
     data = Input_dados(label="Data", hint_text="DD/MM/AAAA - Limite até 7 dias!")
     
-    
     horarios = [
     "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00",
     "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30",
@@ -120,7 +120,6 @@ def principal(page: ft.Page):
         value=""
         )
         
-
     Menu1 = ft.Container(
         content=ft.Column(
             controls=[nome, quantidade, data, horario],
@@ -143,7 +142,6 @@ def principal(page: ft.Page):
     def fechar_popup(dialog):
         dialog.open = False
         page.update()
-
 
     def validar_registro(e):
         
@@ -200,6 +198,16 @@ def principal(page: ft.Page):
         abrir_popup("Registro realizado com sucesso!")
         from Banco_de_dados import inserção_de_dados
         inserção_de_dados(lista[0], lista[1], lista[2], lista[3])
+
+        nome.value = ""
+        quantidade.value = ""
+        data.value = ""
+        horario.value = ""
+
+
+        # Adiciona o novo registro à lista de reservas
+        dados(lista)
+        
         page.update()
         
         
@@ -241,10 +249,8 @@ def principal(page: ft.Page):
     def hover(e):
         e.control.opacity = 0.7 if e.data == "true" else 1  
         e.control.update()
-    
-
-
-    
+     
+    dados = []
     def dados():
         return ft.Container(
             visible=True,
@@ -295,7 +301,7 @@ def principal(page: ft.Page):
                         ft.Container(width=5),  
 
                         ft.Text(
-                            "ID: 01",
+                            f"ID: {lista[0][0]}",
                             color=ft.colors.BLACK,
                             size=13,
                             weight="bold"
@@ -303,7 +309,7 @@ def principal(page: ft.Page):
                         ft.Container(width=5),  
 
                         ft.Text(
-                            "Nome: Paulo",
+                            f"Nome: {lista[0][1]}",
                             color=ft.colors.BLACK,
                             size=13,
                             weight="bold"
@@ -311,9 +317,11 @@ def principal(page: ft.Page):
                     ]
                 )
             )
-
+        
           
     )
+        
+   
     
     # Mensagem ----------------------------------------------------------------
     mensagem = ft.Container(
@@ -328,13 +336,12 @@ def principal(page: ft.Page):
     )
     
 
-
+    
 
     if not lista:
         tela= mensagem
     else:
         tela = dados()
-
 
     page.add(
         cabeçalho, linha, espaço, stack, Menu1, salvar, espaço, tela
