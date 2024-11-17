@@ -5,12 +5,8 @@ import PySimpleGUI as sg
 conexão = sqlite3.connect('meu_banco.db')
 cursor = conexão.cursor()
 
-# Criando a tabela, se ela ainda não existir
 
-
-
-
-
+# Função para guardar os dados na base
 def inserção_de_dados(a, b, c, d):
     # Conectando ao banco de dados
     conexão = sqlite3.connect('meu_banco.db')
