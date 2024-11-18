@@ -13,6 +13,14 @@ for i in range(len(dados)):
     for contador in range(4):
         nova_reserva.append(dados[i][contador])
     lista.append(nova_reserva)
+print(lista)
+
+maior_id = 0
+for i in lista:
+    if i[0] > maior_id:
+        maior_id = i[0]
+        
+
 
 
 def principal(page: ft.Page):
@@ -144,6 +152,8 @@ def principal(page: ft.Page):
         page.update()
 
     def validar_registro(e):
+
+        global maior_id
         
         # Captura a data atual
         data_atual = datetime.now().date()
@@ -194,19 +204,23 @@ def principal(page: ft.Page):
 
 
         # Armazenando os dados em uma lista de forma organizada e jogando para o banco SQL
-        lista = [nome.value,quantidade.value,data_formatada, horario.value]
+        maior_id  = maior_id + 1
+        lista = [maior_id, nome.value,quantidade.value,data_formatada, horario.value]
         abrir_popup("Registro realizado com sucesso!")
         from Banco_de_dados import inserção_de_dados
-        inserção_de_dados(lista[0], lista[1], lista[2], lista[3])
+        inserção_de_dados(lista[1], lista[2], lista[3], lista[4])
 
         nome.value = ""
         quantidade.value = ""
         data.value = ""
         horario.value = ""
 
+       
 
+    
         # Adiciona o novo registro à lista de reservas
-        dados(lista)
+        adicionar_dados(lista)
+
         
         page.update()
         
@@ -250,9 +264,15 @@ def principal(page: ft.Page):
         e.control.opacity = 0.7 if e.data == "true" else 1  
         e.control.update()
      
-    dados = []
-    def dados():
-        return ft.Container(
+    reservas = []
+
+    def adicionar_dados(lista):
+         # Oculta a mensagem inicial se existirem reservas
+        if mensagem.visible:
+            mensagem.visible = False
+            page.update()
+            
+        dados = ft.Container(
             visible=True,
             height=50,
             bgcolor=None,              
@@ -301,7 +321,7 @@ def principal(page: ft.Page):
                         ft.Container(width=5),  
 
                         ft.Text(
-                            f"ID: {lista[0][0]}",
+                            f"ID: {lista[0]}",
                             color=ft.colors.BLACK,
                             size=13,
                             weight="bold"
@@ -309,19 +329,24 @@ def principal(page: ft.Page):
                         ft.Container(width=5),  
 
                         ft.Text(
-                            f"Nome: {lista[0][1]}",
+                            f"Nome: {lista[1]}",
                             color=ft.colors.BLACK,
                             size=13,
                             weight="bold"
                         ),
                     ]
                 )
-            )
+            ) 
+        )   
         
-          
-    )
+      
+        reservas.append(dados)
+        page.add(dados)
+        page.update()
+
+
+    
         
-   
     
     # Mensagem ----------------------------------------------------------------
     mensagem = ft.Container(
@@ -335,16 +360,13 @@ def principal(page: ft.Page):
       
     )
     
-
-    
-
-    if not lista:
-        tela= mensagem
-    else:
-        tela = dados()
+    if len(lista) == 0:
+        mensagem = ft.Text(
+        visible=False  
+    )
 
     page.add(
-        cabeçalho, linha, espaço, stack, Menu1, salvar, espaço, tela
+        cabeçalho, linha, espaço, stack, Menu1, salvar, espaço, mensagem
     )
 
 ft.app(target=principal)
