@@ -2,28 +2,32 @@ import flet as ft
 from datetime import datetime, timedelta #Pegar as datas
 import sqlite3
 
-from Banco_de_dados import alimentando_aplicação
-dados = alimentando_aplicação()
+def trazendo_dados():
+    from Banco_de_dados import alimentando_aplicação
+    dados = alimentando_aplicação()
 
 
-# Trazendo dados do SQL -----------------------------------------------------------
-lista = []
-for i in range(len(dados)):
-    nova_reserva = []
-    for contador in range(4):
-        nova_reserva.append(dados[i][contador])
-    lista.append(nova_reserva)
-print(lista)
+    # Trazendo dados do SQL -----------------------------------------------------------
+    lista = []
+    for i in range(len(dados)):
+        nova_reserva = []
+        for contador in range(4):
+            nova_reserva.append(dados[i][contador])
+        lista.append(nova_reserva)
 
-maior_id = 0
-for i in lista:
-    if i[0] > maior_id:
-        maior_id = i[0]
-        
+    for i in range (len(lista)):
+        print(lista[i])
 
+    maior_id = 0
+    for i in lista:
+        if i[0] > maior_id:
+            maior_id = i[0]
+    
+    return lista, maior_id
 
+lista, maior_id = trazendo_dados()
 
-def principal(page: ft.Page):
+def principal(page: ft.Page):   
 
     # Atributos da minha tela -----------------------------------------------------------
     page.title = "Tela principal"
@@ -151,6 +155,7 @@ def principal(page: ft.Page):
         dialog.open = False
         page.update()
 
+
     def validar_registro(e):
 
         global maior_id
@@ -184,8 +189,6 @@ def principal(page: ft.Page):
         elif quantidade.value.isdigit() == False and quantidade.value != "":
             abrir_popup("A quantidade deve ser numérica!")
             return
-
-        
         
         try:
             valor2 = datetime.strptime(data.value, '%d/%m/%Y').date()
@@ -200,33 +203,23 @@ def principal(page: ft.Page):
             abrir_popup("Escreva no formato (dia/mês/ano)!")
             return
 
-        
-
-
         # Armazenando os dados em uma lista de forma organizada e jogando para o banco SQL
         maior_id  = maior_id + 1
-        lista = [maior_id, nome.value,quantidade.value,data_formatada, horario.value]
+        novos_dados = [maior_id, nome.value,quantidade.value,data_formatada, horario.value]
         abrir_popup("Registro realizado com sucesso!")
         from Banco_de_dados import inserção_de_dados
-        inserção_de_dados(lista[1], lista[2], lista[3], lista[4])
+        inserção_de_dados(novos_dados[1], novos_dados[2], novos_dados[3], novos_dados[4])
 
         nome.value = ""
         quantidade.value = ""
         data.value = ""
         horario.value = ""
 
-       
-
-    
-        # Adiciona o novo registro à lista de reservas
-        adicionar_dados(lista)
-
+        lista, maior_id = trazendo_dados()
+        adicionar_dados(lista, len(lista) - 1)
         
         page.update()
         
-        
-
-
 
     # Botão e estilização ----------------------------------------------------------------
     def hover_botão(e):
@@ -266,12 +259,10 @@ def principal(page: ft.Page):
      
     reservas = []
 
-    def adicionar_dados(lista):
-         # Oculta a mensagem inicial se existirem reservas
-        if mensagem.visible:
-            mensagem.visible = False
-            page.update()
-            
+    
+
+
+    def adicionar_dados(lista, a):
         dados = ft.Container(
             visible=True,
             height=50,
@@ -321,7 +312,7 @@ def principal(page: ft.Page):
                         ft.Container(width=5),  
 
                         ft.Text(
-                            f"ID: {lista[0]}",
+                            f"ID: {lista[a][0]}",
                             color=ft.colors.BLACK,
                             size=13,
                             weight="bold"
@@ -329,7 +320,7 @@ def principal(page: ft.Page):
                         ft.Container(width=5),  
 
                         ft.Text(
-                            f"Nome: {lista[1]}",
+                            f"Nome: {lista[a][1]}",
                             color=ft.colors.BLACK,
                             size=13,
                             weight="bold"
@@ -338,16 +329,18 @@ def principal(page: ft.Page):
                 )
             ) 
         )   
+
+        if len(lista) == 0:
+            mensagem.visible = True
+        else: 
+            mensagem.visible = False
         
-      
         reservas.append(dados)
         page.add(dados)
         page.update()
 
 
-    
-        
-    
+
     # Mensagem ----------------------------------------------------------------
     mensagem = ft.Container(
         content=ft.Text(
@@ -360,13 +353,11 @@ def principal(page: ft.Page):
       
     )
     
-    if len(lista) == 0:
-        mensagem = ft.Text(
-        visible=False  
-    )
 
     page.add(
         cabeçalho, linha, espaço, stack, Menu1, salvar, espaço, mensagem
     )
+    for i in range(len(lista)):
+        adicionar_dados(lista, i)
 
 ft.app(target=principal)
