@@ -264,7 +264,18 @@ def principal(page: ft.Page):
         print(f"lido {id}")
         
     def apagar_reserva(id):
-        print(f"deletado {id}")
+        global lista
+        lista.pop(id-1)
+        print(f"deletado {lista}")
+        from Banco_de_dados import deleção_no_banco
+        deleção_no_banco(id)
+        lista, maior_id = trazendo_dados()
+        print(lista)
+        
+        #Continua em remover o botão da tela
+
+
+
 
     def adicionar_dados(lista, a):
         dados = ft.Container(

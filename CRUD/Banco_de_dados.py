@@ -54,10 +54,17 @@ def alimentando_aplicação():
 
 
 
+def deleção_no_banco(id):
+
+    conexão = sqlite3.connect('meu_banco.db')
+    cursor = conexão.cursor()
 
 
 
+    cursor.execute('DELETE FROM reservas WHERE id = ?', (id,))
 
+    conexão.commit()
+    conexão.close()
 
 """
 
