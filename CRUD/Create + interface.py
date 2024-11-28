@@ -16,7 +16,7 @@ def trazendo_dados():
         lista.append(nova_reserva)
 
     for i in range (len(lista)):
-        print(lista[i])
+        print(f"Essa é a minha lista {lista[i]}")
 
     maior_id = 0
     for i in lista:
@@ -253,17 +253,22 @@ def principal(page: ft.Page):
             self.icon_color = ft.colors.BLACK  
             self.icon_size = 18
             
-    def hover(e):
-        e.control.opacity = 0.7 if e.data == "true" else 1  
-        e.control.update()
      
     reservas = []
-
+    print(lista)
     
+    def editar_reserva(id):
+        print(f"editado {id}")
 
+    def ler_reserva(id):
+        print(f"lido {id}")
+        
+    def apagar_reserva(id):
+        print(f"deletado {id}")
 
     def adicionar_dados(lista, a):
         dados = ft.Container(
+            key=f"container_{lista[a][0]}",
             visible=True,
             height=50,
             bgcolor=None,              
@@ -278,35 +283,29 @@ def principal(page: ft.Page):
                     alignment=ft.MainAxisAlignment.START, 
                     controls=[
                         # Primeiro Container interno
-                        ft.Container(
-                            width=35,
-                            height=35,
+                        ft.IconButton(
+                            icon=ft.icons.EDIT,
+                            icon_size=17,
+                            icon_color=ft.colors.WHITE,
                             bgcolor="green",
-                            content=Interatíveis(icon=ft.icons.EDIT),
-                            alignment=ft.alignment.center,
-                            border_radius=6,
-                            on_hover=hover,
-                        ),
+                            on_click=lambda e, id=lista[a][0]: editar_reserva(id),
+                        ),                                  
                         # Segundo Container interno
-                        ft.Container(
-                            width=35,
-                            height=35,
+                        ft.IconButton(
+                            icon=ft.icons.DELETE,
+                            icon_size=17,
+                            icon_color=ft.colors.WHITE,
                             bgcolor="red",
-                            content=Interatíveis(icon=ft.icons.DELETE),
-                            alignment=ft.alignment.center,
-                            border_radius=6,
-                            on_hover=hover,
-                        ),
+                            on_click=lambda e, id=lista[a][0]: apagar_reserva(id),
+                        ),   
                         # Terceiro Container interno
-                        ft.Container(
-                            width=35,
-                            height=35,
+                        ft.IconButton(
+                            icon=ft.icons.VISIBILITY,
+                            icon_size=17,
+                            icon_color=ft.colors.WHITE,
                             bgcolor="blue",
-                            content=Interatíveis(icon=ft.icons.VISIBILITY),
-                            alignment=ft.alignment.center,
-                            border_radius=6,
-                            on_hover=hover,
-                        ),
+                            on_click=lambda e, id=lista[a][0]: ler_reserva(id),
+                        ), 
 
                         #Espaçamento entre o botão e o texto
                         ft.Container(width=5),  
@@ -336,6 +335,7 @@ def principal(page: ft.Page):
             mensagem.visible = False
         
         reservas.append(dados)
+        
         page.add(dados)
         page.update()
 
