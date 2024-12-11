@@ -264,15 +264,25 @@ def principal(page: ft.Page):
         print(f"lido {id}")
         
     def apagar_reserva(id):
-        global lista
-        lista.pop(id-1)
-        print(f"deletado {lista}")
+        global maior_id
         from Banco_de_dados import deleção_no_banco
         deleção_no_banco(id)
-        lista, maior_id = trazendo_dados()
-        print(lista)
         
-        #Continua em remover o botão da tela
+        key_do_container_dados = f"container_{id}"
+        removedor_de_container = next((container for container in reservas if container.key == key_do_container_dados), None)
+
+        if removedor_de_container:
+            reservas.remove(removedor_de_container)  
+            page.controls.remove(removedor_de_container) 
+
+        lista, maior_id = trazendo_dados() 
+
+        if len(reservas) == 0:  
+            mensagem.visible = True
+        else:
+            mensagem.visible = False
+
+        page.update()  
 
 
 
