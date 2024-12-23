@@ -5,18 +5,18 @@ import sqlite3
 def trazendo_dados():
     from Banco_de_dados import alimentando_aplicação
     dados = alimentando_aplicação()
-
+    print(dados)
 
     # Trazendo dados do SQL -----------------------------------------------------------
     lista = []
     for i in range(len(dados)):
         nova_reserva = []
-        for contador in range(4):
+        for contador in range(5):
             nova_reserva.append(dados[i][contador])
         lista.append(nova_reserva)
 
     for i in range (len(lista)):
-        print(f"Essa é a minha lista {lista[i]}")
+        print(f"{i+1}° Usuário {lista[i]}")
 
     maior_id = 0
     for i in lista:
@@ -26,6 +26,7 @@ def trazendo_dados():
     return lista, maior_id
 
 lista, maior_id = trazendo_dados()
+
 
 def principal(page: ft.Page):   
 
@@ -216,7 +217,8 @@ def principal(page: ft.Page):
         horario.value = ""
 
         lista, maior_id = trazendo_dados()
-        adicionar_dados(lista, len(lista) - 1)
+        adicionar_dados(lista, len(lista) -1)
+        
         
         page.update()
         
@@ -255,10 +257,73 @@ def principal(page: ft.Page):
             
      
     reservas = []
-    print(lista)
+    
+    lista, maior_id = trazendo_dados()
+
+    edit_dialog = ""
+
+    
     
     def editar_reserva(id):
-        print(f"editado {id}")
+        lista, maior_id = trazendo_dados()
+        print(f"No ponto para a edição {lista}")
+        page.update()
+        global edit_dialog
+
+        # Encontrar os dados do usuário pelo ID
+        dados_usuario = next((item for item in lista if item[0] == id), None)
+        if not dados_usuario:
+            abrir_popup(f"Erro: Reserva com ID {id} não encontrada!")
+            return
+
+        # Criar o diálogo de edição
+        edit_dialog = ft.AlertDialog(
+            title=ft.Text(f"Editar Reserva ({id})", size=20),
+            content=ft.Container(
+                content=ft.Column(
+                    controls=[
+                        ft.TextField(
+                            label="Nome",
+                            value=dados_usuario[1],
+                            autofocus=True
+                        ),
+                        ft.TextField(
+                            label="Quantidade de pessoas",
+                            value=dados_usuario[2]
+                        ),
+                        ft.TextField(
+                            label="Data",
+                            value=dados_usuario[3]
+                        ),
+                        ft.Dropdown(
+                            label="Horário",
+                            options=[ft.dropdown.Option(h) for h in horarios],
+                            value=dados_usuario[4]  # Exibe o horário atual
+                        ),
+                    ]
+                ),
+                width=400,  # Largura personalizada do container
+                height=270,  # Altura personalizada do container
+                padding=20  # Adicionando padding interno para espaçamento
+            ),
+            actions=[
+                ft.TextButton("Salvar", on_click=lambda e: salvar_edicao(id)),
+                ft.TextButton("Cancelar", on_click=lambda e: fechar_popup(edit_dialog)),
+            ]
+        )
+
+        # Exibindo o popup de edição
+        page.overlay.append(edit_dialog)
+        edit_dialog.open = True
+        page.update()
+
+
+    def salvar_edicao(id):
+        global edit_dialog
+        # Aqui você implementaria a lógica para salvar as edições feitas
+        print(f"Salvando as edições da reserva {id}")
+        fechar_popup(edit_dialog)
+        page.update()
 
     def ler_reserva(id):
         print(f"lido {id}")

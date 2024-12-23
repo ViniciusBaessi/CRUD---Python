@@ -24,7 +24,7 @@ def inserção_de_dados(a, b, c, d):
         INSERT INTO reservas (nome, quntidade_pessoas, data, horario)
         VALUES (?, ?, ?, ?)
     ''', ( a, b, c, d))
-    print("Salvo no banco")
+    print("Salvo no banco com sucesso")
     
     conexão.commit()
     conexão.close()
