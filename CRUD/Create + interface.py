@@ -276,6 +276,12 @@ def principal(page: ft.Page):
             abrir_popup(f"Erro: Reserva com ID {id} não encontrada!")
             return
 
+       
+        data_formatada = datetime.strptime(dados_usuario[3], '%Y-%m-%d').strftime('%d/%m/%Y')
+        
+
+
+
         # Criar o diálogo de edição
         edit_dialog = ft.AlertDialog(
             title=ft.Text(f"Editar Reserva ({id})", size=20),
@@ -293,7 +299,8 @@ def principal(page: ft.Page):
                         ),
                         ft.TextField(
                             label="Data",
-                            value=dados_usuario[3]
+    
+                            value=data_formatada
                         ),
                         ft.Dropdown(
                             label="Horário",

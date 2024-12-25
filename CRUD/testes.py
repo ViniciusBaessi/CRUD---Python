@@ -1,6 +1,9 @@
 import flet as ft
 
 def main(page: ft.Page):
+    
+    
+    
     # Função chamada ao pressionar o botão "Enviar"
     def enviar_click(e):
         print("Texto enviado:", input_text.value)  # Exemplo: imprimi o valor no console
