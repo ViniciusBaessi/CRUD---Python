@@ -221,6 +221,7 @@ def principal(page: ft.Page):
         
         
         page.update()
+    
         
 
     # Botão e estilização ----------------------------------------------------------------
@@ -276,11 +277,27 @@ def principal(page: ft.Page):
             abrir_popup(f"Erro: Reserva com ID {id} não encontrada!")
             return
 
-       
         data_formatada = datetime.strptime(dados_usuario[3], '%Y-%m-%d').strftime('%d/%m/%Y')
-        
 
-
+        # Variáveis para os campos do formulário
+        nome = ft.TextField(
+            label="Nome",
+            value=dados_usuario[1],
+            autofocus=True
+        )
+        quantidade = ft.TextField(
+            label="Quantidade de pessoas",
+            value=dados_usuario[2]
+        )
+        data = ft.TextField(
+            label="Data",
+            value=data_formatada
+        )
+        horario = ft.Dropdown(
+            label="Horário",
+            options=[ft.dropdown.Option(h) for h in horarios],
+            value=dados_usuario[4]  # Exibe o horário atual
+        )
 
         # Criar o diálogo de edição
         edit_dialog = ft.AlertDialog(
@@ -288,33 +305,18 @@ def principal(page: ft.Page):
             content=ft.Container(
                 content=ft.Column(
                     controls=[
-                        ft.TextField(
-                            label="Nome",
-                            value=dados_usuario[1],
-                            autofocus=True
-                        ),
-                        ft.TextField(
-                            label="Quantidade de pessoas",
-                            value=dados_usuario[2]
-                        ),
-                        ft.TextField(
-                            label="Data",
-    
-                            value=data_formatada
-                        ),
-                        ft.Dropdown(
-                            label="Horário",
-                            options=[ft.dropdown.Option(h) for h in horarios],
-                            value=dados_usuario[4]  # Exibe o horário atual
-                        ),
+                        nome,
+                        quantidade,
+                        data,
+                        horario,
                     ]
                 ),
-                width=400,  # Largura personalizada do container
-                height=270,  # Altura personalizada do container
-                padding=20  # Adicionando padding interno para espaçamento
+                width=400,
+                height=270,
+                padding=20
             ),
             actions=[
-                ft.TextButton("Salvar", on_click=lambda e: salvar_edicao(id)),
+                ft.TextButton("Salvar", on_click=lambda e: salvar_edicao(id, nome, quantidade, data, horario)),
                 ft.TextButton("Cancelar", on_click=lambda e: fechar_popup(edit_dialog)),
             ]
         )
@@ -325,10 +327,21 @@ def principal(page: ft.Page):
         page.update()
 
 
-    def salvar_edicao(id):
+    def salvar_edicao(id, nome, quantidade, data, horario):
         global edit_dialog
-        # Aqui você implementaria a lógica para salvar as edições feitas
+
+        
+        # Pegando os valores dos campos
+        nome = nome.value
+        quantidade = quantidade.value
+        data = data.value
+        horario = horario.value
+
+        # Exemplo de lógica para salvar os dados
         print(f"Salvando as edições da reserva {id}")
+        print(f"Nome: {nome}, Quantidade: {quantidade}, Data: {data}, Horário: {horario}")
+
+
         fechar_popup(edit_dialog)
         page.update()
 

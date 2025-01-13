@@ -1,46 +1,28 @@
 import flet as ft
 
 def main(page: ft.Page):
-    
-    
-    
-    # Função chamada ao pressionar o botão "Enviar"
-    def enviar_click(e):
-        print("Texto enviado:", input_text.value)  # Exemplo: imprimi o valor no console
-        input_text.value = ""  # Limpa o campo de texto
-        page.dialog.open = False
-        page.update()
+    # Variável para guardar o valor do TextField
+    nome_usuario = ""
 
-    # Abre o popup
-    def abrir_popup(e):
-        page.dialog.open = True
-        page.update()
+    # Função para capturar o valor do TextField
+    def pegar_valor(e):
+        nonlocal nome_usuario
+        nome_usuario = campo_nome.value  # Captura o valor
+        print(f"Valor capturado: {nome_usuario}")  # Exibe no console
+        # Você pode fazer qualquer coisa com o valor aqui
 
-    # Campo de texto no popup
-    input_text = ft.TextField(label="Digite algo", multiline=False)
-
-    # Definição do AlertDialog
-    popup = ft.AlertDialog(
-        modal=True,
-        title=ft.Text("Meu Popup"),
-        content=input_text,
-        actions=[
-            ft.TextButton("Cancelar", on_click=lambda e: fechar_popup()),
-            ft.ElevatedButton("Enviar", on_click=enviar_click),
-        ],
+    # Campo de texto
+    campo_nome = ft.TextField(
+        label="Nome",
+        value="",
+        autofocus=True,
     )
 
-    # Função para fechar o popup
-    def fechar_popup():
-        popup.open = False
-        page.update()
+    # Botão para salvar o valor
+    botao_salvar = ft.ElevatedButton("Salvar", on_click=pegar_valor)
 
-    # Configura o dialog no Page
-    page.dialog = popup
+    # Adicionando os elementos à página
+    page.add(campo_nome, botao_salvar)
 
-    # Botão para abrir o popup
-    abrir_button = ft.ElevatedButton("Abrir Popup", on_click=abrir_popup)
-
-    page.add(abrir_button)
-
+# Executando o app
 ft.app(target=main)
